@@ -1,19 +1,19 @@
-name: Sync to Hugging Face hub
+name: Sync with Hugging Face Space
+
 on:
   push:
-    branches: [main]
-  # to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
-  sync-to-hub:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: nateraw/huggingface-sync-action@v0.0.5
         with:
-          fetch-depth: 0
-          lfs: true
-      - name: Push to hub
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://banarc:$HF_TOKEN@huggingface.co/spaces/banarc/First_agent_template main
+          github_repo_id: ${{ github.repository }}
+          huggingface_repo_id: "banarc/First_agent_template"  # Replace with your username and Space name
+          hf_token: ${{ secrets.HF_TOKEN }}
+          repo_type: "space"
+          space_sdk: "gradio"  # Or "streamlit", "static", etc.
